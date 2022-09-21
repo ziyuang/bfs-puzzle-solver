@@ -106,10 +106,10 @@ FORWARD_HASH(BeetleLockState);
 
 int main() {
   BeetleLockState initState(
-      Beetle(Color::Green, Color::Green, Color::Green), Beetle(Color::Purple, Color::Purple, Color::Purple),
-      Beetle(Color::Red, Color::Yellow, Color::Red), Beetle(Color::Yellow, Color::Red, Color::Yellow),
-      Beetle(Color::Blue, Color::Blue, Color::Blue));
+      Beetle(Color::Red, Color::Green, Color::Red), Beetle(Color::Purple, Color::Yellow, Color::Yellow),
+      Beetle(Color::Green, Color::Purple, Color::Blue), Beetle(Color::Yellow, Color::Red, Color::Purple),
+      Beetle(Color::Blue, Color::Blue, Color::Green));
   std::vector<std::string> moves = bfs<BeetleLockState, std::string>(initState);
-  printMoves(moves); // mid -> swap -> mid -> mid -> swap -> mid -> swap -> mid
+  printMoves(moves); // mid -> mid -> mid -> swap -> outer -> outer -> mid -> swap -> mid
   return 0;
 }
