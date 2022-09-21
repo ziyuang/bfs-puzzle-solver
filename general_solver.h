@@ -57,19 +57,20 @@ template <typename F, typename S> struct std::hash<std::pair<F, S>> {
 };
 
 template <typename State, typename Move> std::vector<Move> bfs(const State &initState) {
-  std::unordered_map<std::pair<State, Move>, std::pair<State, Move>> parents;
+  using StateWithMove = std::pair<State, Move>;
+  std::unordered_map<StateWithMove, StateWithMove> parents;
   std::unordered_set<State> visited;
   Queue<State, Move> q;
-  q.push(std::pair<State, Move>({initState, Move{}}));
+  q.push(StateWithMove({initState, Move{}}));
   while (q.size() > 0) {
-    std::pair<State, Move> stateWithMove = q.front();
+    StateWithMove stateWithMove = q.front();
     q.pop();
     auto &[state, move] = stateWithMove;
     if (state.isFinal())
       return extractPath(stateWithMove, parents);
     if (visited.find(state) == visited.end()) {
       visited.insert(state);
-      for (std::pair<State, Move> &nextStateWithMove : state.nextStates()) {
+      for (StateWithMove &nextStateWithMove : state.nextStates()) {
         if (visited.find(nextStateWithMove.first) == visited.end()) {
           parents.insert({nextStateWithMove, stateWithMove});
           q.push(nextStateWithMove);

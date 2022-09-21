@@ -97,7 +97,6 @@ public:
 
 private:
   // north, east, south, west
-  // could have been std::array but we don't have default constructor for Beetle
   std::vector<Beetle> inWheel_;
   Beetle outOfWheel_;
 };
