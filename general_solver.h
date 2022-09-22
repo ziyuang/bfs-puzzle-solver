@@ -49,7 +49,7 @@ template <typename State, typename Move> std::vector<Move> bfs(const State &init
   using State_Move = std::pair<State, Move>;
   std::unordered_map<State_Move, State_Move> parents;
   std::unordered_set<State> visited;
-  std::queue<std::pair<State, Move>> q;
+  std::queue<State_Move> q;
   q.push(State_Move({initState, Move{}}));
   while (q.size() > 0) {
     State_Move state_move = q.front();
