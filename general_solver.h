@@ -63,17 +63,17 @@ template <typename State, typename Move> std::vector<Move> bfs(const State &init
   Queue<State, Move> q;
   q.push(State_Move({initState, Move{}}));
   while (q.size() > 0) {
-    State_Move stateWithMove = q.front();
+    State_Move state_move = q.front();
     q.pop();
-    auto &[state, move] = stateWithMove;
+    auto &[state, move] = state_move;
     if (state.isFinal())
-      return extractPath(stateWithMove, parents);
+      return extractPath(state_move, parents);
     if (visited.find(state) == visited.end()) {
       visited.insert(state);
-      for (State_Move &nextStateWithMove : state.nextStates()) {
-        if (visited.find(nextStateWithMove.first) == visited.end()) {
-          parents.insert({nextStateWithMove, stateWithMove});
-          q.push(nextStateWithMove);
+      for (State_Move &nextState_nextMove : state.nextStates()) {
+        if (visited.find(nextState_nextMove.first) == visited.end()) {
+          parents.insert({nextState_nextMove, state_move});
+          q.push(nextState_nextMove);
         }
       }
     }
