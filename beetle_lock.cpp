@@ -67,12 +67,12 @@ public:
            inWheel_[3] == other.inWheel_[3] && outOfWheel_ == other.outOfWheel_;
   }
 
-  std::vector<StateWithMove> nextStates() {
-    std::vector<StateWithMove> states{
-        StateWithMove(BeetleLockState(outOfWheel_, inWheel_[1], inWheel_[2], inWheel_[3], inWheel_[0]), "swap")};
+  std::vector<State_Move> nextStates() {
+    std::vector<State_Move> states{
+        State_Move(BeetleLockState(outOfWheel_, inWheel_[1], inWheel_[2], inWheel_[3], inWheel_[0]), "swap")};
     size_t wheelSize = inWheel_.size();
     size_t numBodyParts = outOfWheel_.colors().size();
-    std::vector<std::string> rotateOps{"outer", "mid", "inner"};
+    std::vector<std::string> rotateOps{"outer", "middle", "inner"};
     for (size_t i = 0; i < numBodyParts; i++) {
       std::vector<Beetle> newInWheelBeetles;
       newInWheelBeetles.reserve(wheelSize);
@@ -90,7 +90,7 @@ public:
         }
         newInWheelBeetles.push_back(Beetle(colors));
       }
-      states.push_back(StateWithMove({BeetleLockState(newInWheelBeetles, outOfWheel_), rotateOps[i]}));
+      states.push_back(State_Move({BeetleLockState(newInWheelBeetles, outOfWheel_), rotateOps[i]}));
     }
     return states;
   }
@@ -109,6 +109,6 @@ int main() {
       Beetle(Color::Green, Color::Purple, Color::Blue), Beetle(Color::Yellow, Color::Red, Color::Purple),
       Beetle(Color::Blue, Color::Blue, Color::Green));
   std::vector<std::string> moves = bfs<BeetleLockState, std::string>(initState);
-  printMoves(moves); // mid -> mid -> mid -> swap -> outer -> outer -> mid -> swap -> mid
+  printMoves(moves); // middle -> middle -> middle -> swap -> outer -> outer -> middle -> swap -> middle
   return 0;
 }

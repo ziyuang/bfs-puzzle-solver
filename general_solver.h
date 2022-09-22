@@ -16,10 +16,10 @@
 
 template <typename State, typename Move> class BaseState {
 protected:
-  using StateWithMove = std::pair<State, Move>;
+  using State_Move = std::pair<State, Move>;
 
 public:
-  std::vector<StateWithMove> nextStates() { return static_cast<State *>(this)->nextStates(); }
+  std::vector<State_Move> nextStates() { return static_cast<State *>(this)->nextStates(); }
   bool isFinal() const { return static_cast<State *>(this)->isFinal(); }
 };
 
@@ -57,20 +57,20 @@ template <typename F, typename S> struct std::hash<std::pair<F, S>> {
 };
 
 template <typename State, typename Move> std::vector<Move> bfs(const State &initState) {
-  using StateWithMove = std::pair<State, Move>;
-  std::unordered_map<StateWithMove, StateWithMove> parents;
+  using State_Move = std::pair<State, Move>;
+  std::unordered_map<State_Move, State_Move> parents;
   std::unordered_set<State> visited;
   Queue<State, Move> q;
-  q.push(StateWithMove({initState, Move{}}));
+  q.push(State_Move({initState, Move{}}));
   while (q.size() > 0) {
-    StateWithMove stateWithMove = q.front();
+    State_Move stateWithMove = q.front();
     q.pop();
     auto &[state, move] = stateWithMove;
     if (state.isFinal())
       return extractPath(stateWithMove, parents);
     if (visited.find(state) == visited.end()) {
       visited.insert(state);
-      for (StateWithMove &nextStateWithMove : state.nextStates()) {
+      for (State_Move &nextStateWithMove : state.nextStates()) {
         if (visited.find(nextStateWithMove.first) == visited.end()) {
           parents.insert({nextStateWithMove, stateWithMove});
           q.push(nextStateWithMove);

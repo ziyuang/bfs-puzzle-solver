@@ -25,8 +25,8 @@ public:
     return true;
   }
   bool isFinal() const { return (*this) == answer_; }
-  std::vector<StateWithMove> nextStates() {
-    return std::vector<StateWithMove>{{WordLockState(rotateMiddle()), "middle"},
+  std::vector<State_Move> nextStates() {
+    return std::vector<State_Move>{{WordLockState(rotateMiddle()), "middle"},
                                       {WordLockState(rotateRight()), "right"}};
   }
 
