@@ -25,17 +25,6 @@ public:
 
 namespace {
 
-template <typename State, typename Move, typename = void> struct QueueImpl {
-  using type = std::queue<std::pair<State, Move>>;
-};
-
-template <typename State, typename Move>
-struct QueueImpl<State, Move, decltype(std::less<State>(std::declval<State>(), std::declval<State>()))> {
-  using type = std::priority_queue<std::pair<State, Move>, std::vector<std::pair<State, Move>>, std::less<State>>;
-};
-
-template <typename State, typename Move> using Queue = typename QueueImpl<State, Move>::type;
-
 template <typename State, typename Move>
 std::vector<Move> extractPath(const std::pair<State, Move> &finalState,
                               const std::unordered_map<std::pair<State, Move>, std::pair<State, Move>> &parents) {
@@ -60,7 +49,7 @@ template <typename State, typename Move> std::vector<Move> bfs(const State &init
   using State_Move = std::pair<State, Move>;
   std::unordered_map<State_Move, State_Move> parents;
   std::unordered_set<State> visited;
-  Queue<State, Move> q;
+  std::queue<std::pair<State, Move>> q;
   q.push(State_Move({initState, Move{}}));
   while (q.size() > 0) {
     State_Move state_move = q.front();
