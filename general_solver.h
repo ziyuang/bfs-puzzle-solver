@@ -37,24 +37,25 @@ std::vector<Move> extractPath(const std::pair<State, Move> &finalState,
   return std::vector<Move>(path.rbegin() + 1, path.rend());
 }
 
-template <typename F, typename S, typename = void>
-struct QueueImpl {
-    using type = std::queue<std::pair<F, S>>;
+template <typename F, typename S, typename = void> struct QueueImpl { using type = std::queue<std::pair<F, S>>; };
+
+template <typename F, typename S> struct QueueImpl<F, S, std::void_t<decltype(std::declval<F>() < std::declval<F>())>> {
+  using type = std::priority_queue<std::pair<F, S>>;
 };
 
-template <typename F, typename S>
-struct QueueImpl<F, S, std::void_t<decltype(std::declval<F>() < std::declval<F>())>> {
-    using type = std::priority_queue<std::pair<F, S>>;
-};
+template <typename F, typename S> using Queue = typename QueueImpl<F, S>::type;
 
-template <typename F, typename S>
-using Queue = typename QueueImpl<F, S>::type;
+template <int N = sizeof(size_t)> size_t makeMask(size_t currentMask = 0x55) {
+  return makeMask<N - 1>((currentMask << 8) | (currentMask & 0xff));
+}
+template <> size_t makeMask<0>(size_t currentMask) { return currentMask; }
 
 } // namespace
 
 template <typename F, typename S> struct std::hash<std::pair<F, S>> {
   size_t operator()(const std::pair<F, S> &pair) const {
-    return std::hash<F>{}(pair.first) ^ std::hash<S>{}(pair.second);
+    size_t mask = makeMask<>();
+    return (std::hash<F>{}(pair.first) & mask) ^ (std::hash<S>{}(pair.second) & ~mask);
   }
 };
 
