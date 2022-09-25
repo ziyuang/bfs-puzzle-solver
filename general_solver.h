@@ -45,18 +45,18 @@ template <typename F, typename S> using Queue = typename QueueImpl<F, S>::type;
 // https://stackoverflow.com/a/61144425/688080
 template <typename F, typename... Others> using First = F;
 
-template <int N = sizeof(size_t)> size_t makeMask(size_t currentMask = 0x55) {
-  if constexpr (N == 0)
+template <int n = sizeof(size_t)> size_t make01Mask(size_t currentMask = 0x55) {
+  if constexpr (n == 0)
     return currentMask;
   else
-    return makeMask<N - 1>((currentMask << 8) | (currentMask & 0xff));
+    return make01Mask<n - 1>((currentMask << 8) | (currentMask & 0xff));
 }
 
 } // namespace
 
 template <typename F, typename S> struct std::hash<std::pair<F, S>> {
   size_t operator()(const std::pair<F, S> &pair) const {
-    size_t mask = makeMask<>();
+    size_t mask = make01Mask<>();
     return (std::hash<F>{}(pair.first) & mask) ^ (std::hash<S>{}(pair.second) & ~mask);
   }
 };
