@@ -9,17 +9,14 @@
 #include <utility>
 #include <vector>
 
-#define FORWARD_HASH(T)                                                                                                \
-  template <> struct std::hash<T> {                                                                                    \
-    size_t operator()(const T &t) const { return t.hash(); }                                                           \
-  }
-
 template <typename State, typename Move> class BaseState {
 protected:
   using State_Move = std::pair<State, Move>;
 
 public:
+  using MoveType = Move; // for both convenience and SFINAE
   std::vector<State_Move> nextStates() { return static_cast<State *>(this)->nextStates(); }
+  size_t hash() const { return static_cast<State *>(this)->hash(); }
   bool isFinal() const { return static_cast<State *>(this)->isFinal(); }
 };
 
@@ -45,6 +42,9 @@ template <typename F, typename S> struct QueueImpl<F, S, std::void_t<decltype(st
 
 template <typename F, typename S> using Queue = typename QueueImpl<F, S>::type;
 
+// https://stackoverflow.com/a/61144425/688080
+template <typename F, typename... Others> using First = F;
+
 template <int N = sizeof(size_t)> size_t makeMask(size_t currentMask = 0x55) {
   return makeMask<N - 1>((currentMask << 8) | (currentMask & 0xff));
 }
@@ -59,7 +59,13 @@ template <typename F, typename S> struct std::hash<std::pair<F, S>> {
   }
 };
 
-template <typename State, typename Move> std::vector<Move> bfs(const State &initState) {
+template <typename State> struct std::hash<First<State, typename State::MoveType>> {
+  size_t operator()(const State &s) const { return s.hash(); }
+};
+
+template <typename State, typename = typename State::MoveType>
+std::vector<typename State::MoveType> bfs(const State &initState) {
+  using Move = typename State::MoveType;
   using State_Move = std::pair<State, Move>;
   std::unordered_map<State_Move, State_Move> parents;
   std::unordered_set<State> visited;

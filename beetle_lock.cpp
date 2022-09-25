@@ -101,14 +101,12 @@ private:
   Beetle outOfWheel_;
 };
 
-FORWARD_HASH(BeetleLockState);
-
 int main() {
   BeetleLockState initState(
       Beetle(Color::Red, Color::Green, Color::Red), Beetle(Color::Purple, Color::Yellow, Color::Yellow),
       Beetle(Color::Green, Color::Purple, Color::Blue), Beetle(Color::Yellow, Color::Red, Color::Purple),
       Beetle(Color::Blue, Color::Blue, Color::Green));
   // middle -> middle -> middle -> swap -> outer -> outer -> middle -> swap -> middle
-  printMoves(bfs<BeetleLockState, std::string>(initState));
+  printMoves(bfs<BeetleLockState>(initState));
   return 0;
 }

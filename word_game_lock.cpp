@@ -42,11 +42,9 @@ private:
 
 const WordLockState WordLockState::answer_({"的", "蠢", "封", "连", "的", "可", "维"});
 
-FORWARD_HASH(WordLockState);
-
 int main() {
   WordLockState initState({"可", "封", "的", "蠢", "维", "的", "连"});
   // right -> right -> right -> middle -> middle -> right -> right
-  printMoves(bfs<WordLockState, std::string>(initState));
+  printMoves(bfs<WordLockState>(initState));
   return 0;
 }
