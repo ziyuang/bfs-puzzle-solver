@@ -6,7 +6,8 @@
 
 class WordLockState : public BaseState<WordLockState, std::string> {
 private:
-  using Chars = std::array<std::string, 7>;
+  constexpr static int CHAR_COUNT = 7;
+  using Chars = std::array<std::string, CHAR_COUNT>;
 
 public:
   WordLockState(const Chars &characters) : c_(characters) {}
@@ -20,13 +21,7 @@ public:
       return h ^ (x + 0x9e3779b9 + (h << 6) + (h >> 2));
     });
   }
-  bool operator==(const WordLockState &other) const {
-    for (size_t i = 0; i < c_.size(); i++) {
-      if (c_[i] != other.c_[i])
-        return false;
-    }
-    return true;
-  }
+  bool operator==(const WordLockState &other) const { return equalsTo<CHAR_COUNT - 1>(other.c_); }
   bool isFinal() const { return (*this) == answer_; }
   std::vector<State_Move> nextStates() {
     return std::vector<State_Move>{{WordLockState(rotateMiddle()), "middle"}, {WordLockState(rotateRight()), "right"}};
@@ -35,6 +30,13 @@ public:
 private:
   Chars c_;
   static const WordLockState answer_;
+
+  template <int tail> bool equalsTo(const Chars &other) const {
+    if constexpr (tail == 0)
+      return c_[0] == other[0];
+    else
+      return c_[tail] == other[tail] ? equalsTo<tail - 1>(other) : false;
+  }
 
   Chars rotateMiddle() { return Chars{c_[2], c_[1], c_[5], c_[0], c_[4], c_[3], c_[6]}; }
   Chars rotateRight() { return Chars{c_[0], c_[3], c_[2], c_[6], c_[1], c_[5], c_[4]}; }

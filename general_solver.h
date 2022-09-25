@@ -46,9 +46,11 @@ template <typename F, typename S> using Queue = typename QueueImpl<F, S>::type;
 template <typename F, typename... Others> using First = F;
 
 template <int N = sizeof(size_t)> size_t makeMask(size_t currentMask = 0x55) {
-  return makeMask<N - 1>((currentMask << 8) | (currentMask & 0xff));
+  if constexpr (N == 0)
+    return currentMask;
+  else
+    return makeMask<N - 1>((currentMask << 8) | (currentMask & 0xff));
 }
-template <> size_t makeMask<0>(size_t currentMask) { return currentMask; }
 
 } // namespace
 
