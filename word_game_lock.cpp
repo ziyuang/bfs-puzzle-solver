@@ -12,14 +12,7 @@ private:
 public:
   WordLockState(const Chars &characters) : c_(characters) {}
   size_t hash() const {
-    // https://stackoverflow.com/a/72073933/688080
-    return std::accumulate(c_.begin(), c_.end(), c_.size(), [](std::size_t h, const std::string &mbchar) {
-      size_t x = std::hash<std::string>{}(mbchar);
-      x = ((x >> 16) ^ x) * 0x45d9f3b;
-      x = ((x >> 16) ^ x) * 0x45d9f3b;
-      x = (x >> 16) ^ x;
-      return h ^ (x + 0x9e3779b9 + (h << 6) + (h >> 2));
-    });
+    return hash<CHAR_COUNT - 1>();
   }
   bool operator==(const WordLockState &other) const { return equalsTo<CHAR_COUNT - 1>(other.c_); }
   bool isFinal() const { return (*this) == answer_; }
@@ -29,13 +22,28 @@ public:
 
 private:
   Chars c_;
+  std::hash<std::string> hash_{};
   static const WordLockState answer_;
 
   template <int tail> bool equalsTo(const Chars &other) const {
     if constexpr (tail == 0)
-      return c_[0] == other[0];
+      return c_[tail] == other[tail];
     else
       return c_[tail] == other[tail] ? equalsTo<tail - 1>(other) : false;
+  }
+  template <int tail> size_t hash() const {
+    // https://stackoverflow.com/a/72073933/688080
+    if constexpr (tail == -1)
+      return c_.size();
+    else {
+      const std::string &mbchar = c_[tail];
+      size_t x = hash_(mbchar);
+      x = ((x >> 16) ^ x) * 0x45d9f3b;
+      x = ((x >> 16) ^ x) * 0x45d9f3b;
+      x = (x >> 16) ^ x;
+      size_t h = hash<tail - 1>();
+      return h ^ (x + 0x9e3779b9 + (h << 6) + (h >> 2));
+    }
   }
 
   Chars rotateMiddle() { return Chars{c_[2], c_[1], c_[5], c_[0], c_[4], c_[3], c_[6]}; }
