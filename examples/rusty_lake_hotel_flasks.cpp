@@ -4,9 +4,9 @@
 
 #include "../general_solver.h"
 
-std::string tuple2String(const std::array<size_t, 2> &tuple) {
+std::string pair2String(const std::array<size_t, 2> &pair) {
   std::stringstream ss;
-  ss << '(' << tuple[0] << '>' << tuple[1] << ')';
+  ss << '(' << pair[0] << '>' << pair[1] << ')';
   return ss.str();
 }
 
@@ -39,7 +39,7 @@ class FlaskState : public BaseState<FlaskState, std::string> {
             newAmount[j] = limit_[j];
             newAmount[i] = amounts_[i] + amounts_[j] - limit_[j];
           }
-          states.push_back({FlaskState(newAmount), tuple2String({i, j})});
+          states.push_back({FlaskState(newAmount), pair2String({i, j})});
         }
     return states;
   }
