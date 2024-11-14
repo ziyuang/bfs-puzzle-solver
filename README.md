@@ -30,6 +30,6 @@ See any specific solver for an example.
   The goal is to make the first flask (flask 0) hold water of an exact amount of 8 by pouring the water from one flask to another. 
   The intial state of the puzzle is shown below.
 
-  (solution: (2>0) → (1>0) → (0>2) → (2>1) → (1>0) → (2>1) → (0>2) → (2>1) → (1>0))
+  (solution: (2>0) → (2>1) → (0>2) → (2>1) → (1>0) → (2>1) → (0>2) → (2>1) → (1>0))
 
   ![rusty lake hotel flasks](examples/rusty_lake_hotel_flasks.jpg)
