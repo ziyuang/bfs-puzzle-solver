@@ -2,7 +2,7 @@
 #include <utility>
 #include <vector>
 
-#include "general_solver.h"
+#include "../general_solver.h"
 
 enum class Color : size_t { Red, Yellow, Green, Blue, Purple };
 

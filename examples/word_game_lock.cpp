@@ -2,7 +2,7 @@
 #include <numeric>
 #include <string>
 
-#include "general_solver.h"
+#include "../general_solver.h"
 
 class WordLockState : public BaseState<WordLockState, std::string> {
 private:

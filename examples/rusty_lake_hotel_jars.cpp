@@ -2,7 +2,7 @@
 #include <sstream>
 #include <string>
 
-#include "general_solver.h"
+#include "../general_solver.h"
 
 std::string tuple2String(const std::array<size_t, 2> &tuple) {
   std::stringstream ss;
@@ -46,9 +46,8 @@ class JarState : public BaseState<JarState, std::string> {
 };
 
 int main() {
-  JarState initState({0, 5, 6});
-  // (2>0) -> (1>0) -> (0>2) -> (2>1) -> (1>0) -> (2>1) -> (0>2) -> (2>1) ->
-  // (1>0)
+  JarState initState({5, 0, 6});
+  // (2>0) -> (2>1) -> (0>2) -> (2>1) -> (1>0) -> (2>1) -> (0>2) -> (2>1) -> (1>0)
   printMoves(bfs<JarState>(initState));
   return 0;
 }
