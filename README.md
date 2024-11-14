@@ -25,11 +25,11 @@ See any specific solver for an example.
   ![word game lock](examples/word_game_lock.jpg)
 
 
-* [`rusty_lake_hotel_jars.cpp`](examples/rusty_lake_hotel_jars.cpp):  solver for the three-jar puzzle at the deer's room in [Rusty Lake Hotel](https://store.steampowered.com/app/435120/Rusty_Lake_Hotel/).
+* [`rusty_lake_hotel_flasks.cpp`](examples/rusty_lake_hotel_flasks.cpp):  solver for the three-flask puzzle at the deer's room in [Rusty Lake Hotel](https://store.steampowered.com/app/435120/Rusty_Lake_Hotel/).
 
-  The goal is to make the first jar (jar 0) hold water of an exact amount of 8 by pouring the water from one jar to another. 
+  The goal is to make the first flask (flask 0) hold water of an exact amount of 8 by pouring the water from one flask to another. 
   The intial state of the puzzle is shown below.
 
   (solution: (2>0) → (1>0) → (0>2) → (2>1) → (1>0) → (2>1) → (0>2) → (2>1) → (1>0))
 
-  ![rusty lake hotel jars](examples/rusty_lake_hotel_jars.jpg)
+  ![rusty lake hotel flasks](examples/rusty_lake_hotel_flasks.jpg)

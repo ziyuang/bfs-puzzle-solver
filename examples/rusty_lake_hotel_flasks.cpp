@@ -10,17 +10,17 @@ std::string tuple2String(const std::array<size_t, 2> &tuple) {
   return ss.str();
 }
 
-class JarState : public BaseState<JarState, std::string> {
+class FlaskState : public BaseState<FlaskState, std::string> {
  private:
   std::array<int, 3> amounts_;
   std::array<int, 3> limit_{10, 5, 6};
 
  public:
-  JarState(const std::array<int, 3> &amounts) : amounts_(amounts) {}
+  FlaskState(const std::array<int, 3> &amounts) : amounts_(amounts) {}
   size_t hash() const {
     return amounts_[0] ^ (amounts_[1] << 10) ^ (amounts_[2] << 20);
   }
-  bool operator==(const JarState &other) const {
+  bool operator==(const FlaskState &other) const {
     return amounts_ == other.amounts_;
   }
   bool isFinal() const { return amounts_[0] == 8; }
@@ -39,15 +39,16 @@ class JarState : public BaseState<JarState, std::string> {
             newAmount[j] = limit_[j];
             newAmount[i] = amounts_[i] + amounts_[j] - limit_[j];
           }
-          states.push_back({JarState(newAmount), tuple2String({i, j})});
+          states.push_back({FlaskState(newAmount), tuple2String({i, j})});
         }
     return states;
   }
 };
 
 int main() {
-  JarState initState({5, 0, 6});
-  // (2>0) -> (2>1) -> (0>2) -> (2>1) -> (1>0) -> (2>1) -> (0>2) -> (2>1) -> (1>0)
-  printMoves(bfs<JarState>(initState));
+  FlaskState initState({5, 0, 6});
+  // (2>0) -> (2>1) -> (0>2) -> (2>1) -> (1>0) -> (2>1) -> (0>2) -> (2>1) ->
+  // (1>0)
+  printMoves(bfs<FlaskState>(initState));
   return 0;
 }
